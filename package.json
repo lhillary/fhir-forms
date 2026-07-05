@@ -1,5 +1,5 @@
 {
-  "name": "fhir-forms",
+  "name": "FHIR Form Engine",
   "private": true,
   "version": "0.0.0",
   "type": "module",

@@ -4,10 +4,10 @@ test('app boots and renders the heading', async ({ page }) => {
   await page.goto('/')
 
   await expect(
-    page.getByRole('heading', { level: 1, name: 'fhir-forms' }),
+    page.getByRole('heading', { level: 1, name: 'FHIR Form Engine' }),
   ).toBeVisible()
   await expect(page).toHaveTitle(
-    'Patient Health Questionnaire-9 (PHQ-9) · fhir-forms',
+    'Patient Health Questionnaire-9 (PHQ-9) · FHIR Form Engine',
   )
 })
 
@@ -40,7 +40,7 @@ test('the form picker switches forms, updates the URL and title, and focuses the
   await expect(heading).toBeFocused()
   await expect(page).toHaveURL(/\?form=kitchen-sink/)
   await expect(page).toHaveTitle(
-    'Kitchen Sink (renderer coverage form) · fhir-forms',
+    'Kitchen Sink (renderer coverage form) · FHIR Form Engine',
   )
 })
 

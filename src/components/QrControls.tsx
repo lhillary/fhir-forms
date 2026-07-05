@@ -2,6 +2,7 @@ import { useState, type ReactElement } from 'react'
 import { Button, FileTrigger } from 'react-aria-components'
 import type { QuestionnaireResponse } from 'fhir/r4'
 import { useExportQR, useFormStore } from '../store/useFormStore'
+import { downloadQrFile } from './downloadQr'
 import { secondaryButtonClass } from './styles'
 
 function isQuestionnaireResponse(
@@ -19,18 +20,6 @@ export function QrControls(): ReactElement {
   const qr = useExportQR()
   const loadFromQR = useFormStore((state) => state.loadFromQR)
   const [status, setStatus] = useState('')
-
-  const exportQr = (): void => {
-    const blob = new Blob([JSON.stringify(qr, null, 2)], {
-      type: 'application/json',
-    })
-    const url = URL.createObjectURL(blob)
-    const anchor = document.createElement('a')
-    anchor.href = url
-    anchor.download = 'questionnaire-response.json'
-    anchor.click()
-    URL.revokeObjectURL(url)
-  }
 
   const importFiles = async (files: FileList | null): Promise<void> => {
     const file = files?.[0]
@@ -50,7 +39,7 @@ export function QrControls(): ReactElement {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Button onPress={exportQr} className={secondaryButtonClass}>
+      <Button onPress={() => downloadQrFile(qr)} className={secondaryButtonClass}>
         Export QuestionnaireResponse
       </Button>
       <FileTrigger
