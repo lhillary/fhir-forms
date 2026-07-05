@@ -47,6 +47,24 @@ test('phq9: answered state has no axe violations', async ({ page }) => {
   await expectNoViolations(page)
 })
 
+test('phq9: completed state has no axe violations', async ({ page }) => {
+  await page.goto('/?form=phq9')
+  // q1-q9 are the only radiogroups; "difficulty" renders as a drop-down
+  for (let index = 0; index < 9; index += 1) {
+    await page
+      .getByRole('radiogroup')
+      .nth(index)
+      .getByText('Several days')
+      .click()
+  }
+  await page.getByRole('button', { name: 'Submit' }).click()
+
+  const heading = page.getByRole('heading', { name: 'Questionnaire completed' })
+  await expect(heading).toBeVisible()
+  await expect(heading).toBeFocused()
+  await expectNoViolations(page)
+})
+
 test('reset confirmation dialog has no axe violations', async ({ page }) => {
   await page.goto('/?form=phq9')
   await page.getByRole('button', { name: 'Reset' }).click()

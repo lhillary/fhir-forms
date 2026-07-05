@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react'
-import type { Questionnaire } from 'fhir/r4'
+import type { Questionnaire, QuestionnaireResponse } from 'fhir/r4'
 import kitchenSink from './fixtures/kitchen-sink.json'
 import phq9 from './fixtures/phq9.json'
 import { parseQuestionnaire } from './parser/parseQuestionnaire'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { QuestionnaireForm } from './components/QuestionnaireForm'
 import type { SeverityBand } from './components/ScorePanel'
+import { CompletedView } from './CompletedView'
 import { SEVERITY_BANDS } from './severityBands'
+import { useFormStore } from './store/useFormStore'
 
 interface FormEntry {
   questionnaire: Questionnaire
@@ -18,7 +20,7 @@ const FORMS: Record<string, FormEntry> = {
   phq9: { questionnaire: phq9 as unknown as Questionnaire, label: 'PHQ-9' },
   'kitchen-sink': {
     questionnaire: kitchenSink as unknown as Questionnaire,
-    label: 'Kitchen sink',
+    label: 'Kitchen Sink',
   },
 }
 
@@ -52,13 +54,35 @@ function FormView({
     () => parseQuestionnaire(questionnaire),
     [questionnaire],
   )
+  const [submittedQr, setSubmittedQr] = useState<QuestionnaireResponse | null>(
+    null,
+  )
+  // Set by "Start over" so the remounted form focuses its heading, mirroring
+  // an in-app form switch
+  const [restarted, setRestarted] = useState(false)
+  const reset = useFormStore((state) => state.reset)
+
+  if (submittedQr !== null)
+    return (
+      <CompletedView
+        qr={submittedQr}
+        items={items}
+        bands={bands}
+        onStartOver={() => {
+          reset()
+          setSubmittedQr(null)
+          setRestarted(true)
+        }}
+      />
+    )
 
   return (
     <QuestionnaireForm
       items={items}
       questionnaire={questionnaire}
       bands={bands}
-      focusHeadingOnMount={focusHeading}
+      focusHeadingOnMount={focusHeading || restarted}
+      onSubmit={setSubmittedQr}
     />
   )
 }
@@ -80,7 +104,7 @@ function App(): ReactElement {
   }, [])
 
   useEffect(() => {
-    document.title = `${questionnaire.title ?? formId} · fhir-forms`
+    document.title = `${questionnaire.title ?? formId} · FHIR Form Engine`
   }, [questionnaire, formId])
 
   const selectForm = (id: string): void => {
@@ -97,7 +121,7 @@ function App(): ReactElement {
       </a>
       <header className="border-b border-line bg-surface">
         <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
-          <h1 className="text-xl font-bold text-ink">fhir-forms</h1>
+          <h1 className="text-xl font-bold text-ink">FHIR Form Engine</h1>
           <nav aria-label="Questionnaires" className="flex gap-1">
             {Object.entries(FORMS).map(([id, { label }]) => (
               <a

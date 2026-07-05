@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type ReactElement } from 'react'
 import { Button } from 'react-aria-components'
-import type { Questionnaire } from 'fhir/r4'
+import type { Questionnaire, QuestionnaireResponse } from 'fhir/r4'
 import type { NormalizedItem } from '../parser/types'
-import { useFormStore } from '../store/useFormStore'
+import { selectExportQR, useFormStore } from '../store/useFormStore'
 import { EnableWhenAnnouncer } from './EnableWhenAnnouncer'
 import { ErrorSummary } from './ErrorSummary'
 import { QrControls } from './QrControls'
@@ -18,6 +18,10 @@ interface QuestionnaireFormProps {
   // Set when the user switched forms in-app, so focus lands on the new
   // form's heading instead of staying on the picker
   focusHeadingOnMount?: boolean | undefined
+  // Receives the finalized QuestionnaireResponse when submit passes
+  // validation. The form never persists or POSTs — what happens to the
+  // artifact is the host's concern.
+  onSubmit?: ((qr: QuestionnaireResponse) => void) | undefined
 }
 
 export function QuestionnaireForm({
@@ -25,6 +29,7 @@ export function QuestionnaireForm({
   questionnaire,
   bands,
   focusHeadingOnMount = false,
+  onSubmit,
 }: QuestionnaireFormProps): ReactElement {
   const hydrate = useFormStore((state) => state.hydrate)
   const attemptSubmit = useFormStore((state) => state.attemptSubmit)
@@ -57,7 +62,11 @@ export function QuestionnaireForm({
       noValidate
       onSubmit={(event) => {
         event.preventDefault()
-        if (!attemptSubmit()) setFocusTick((tick) => tick + 1)
+        if (!attemptSubmit()) {
+          setFocusTick((tick) => tick + 1)
+          return
+        }
+        onSubmit?.(selectExportQR(useFormStore.getState()))
       }}
       className="lg:grid lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start lg:gap-6"
     >
