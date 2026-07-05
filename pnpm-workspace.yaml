@@ -1,0 +1,5 @@
+# fhirpath's only build script is a demo-installer preinstall + a webpack browser
+# bundle; neither is needed when Vite consumes the package source. Intentionally
+# not built.
+ignoredBuiltDependencies:
+  - fhirpath

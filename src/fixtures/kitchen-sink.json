@@ -1,0 +1,296 @@
+{
+  "resourceType": "Questionnaire",
+  "id": "kitchen-sink",
+  "url": "http://example.org/fhir/Questionnaire/kitchen-sink",
+  "version": "1.0.0",
+  "name": "KitchenSink",
+  "title": "Kitchen Sink (renderer coverage form)",
+  "status": "active",
+  "subjectType": ["Patient"],
+  "date": "2026-01-01",
+  "description": "Synthetic form that exercises every supported item type, itemControl, enableWhen operator, enableBehavior, and validation rule. Used by the demo and the a11y/test sweeps.",
+  "item": [
+    {
+      "linkId": "g-demographics",
+      "type": "group",
+      "text": "Demographics",
+      "item": [
+        {
+          "linkId": "firstName",
+          "type": "string",
+          "text": "First name",
+          "required": true,
+          "maxLength": 50
+        },
+        {
+          "linkId": "postalCode",
+          "type": "string",
+          "text": "Postal code",
+          "extension": [
+            { "url": "http://hl7.org/fhir/StructureDefinition/regex", "valueString": "^\\d{5}(-\\d{4})?$" },
+            { "url": "http://hl7.org/fhir/StructureDefinition/entryFormat", "valueString": "#####" }
+          ]
+        },
+        {
+          "linkId": "dob",
+          "type": "date",
+          "text": "Date of birth",
+          "extension": [
+            { "url": "http://hl7.org/fhir/StructureDefinition/maxValue", "valueDate": "2026-07-05" }
+          ]
+        },
+        {
+          "linkId": "age",
+          "type": "integer",
+          "text": "Age (years)",
+          "extension": [
+            { "url": "http://hl7.org/fhir/StructureDefinition/minValue", "valueInteger": 0 },
+            { "url": "http://hl7.org/fhir/StructureDefinition/maxValue", "valueInteger": 120 }
+          ]
+        },
+        {
+          "linkId": "heightM",
+          "type": "decimal",
+          "text": "Height (meters)",
+          "extension": [
+            { "url": "http://hl7.org/fhir/StructureDefinition/minValue", "valueDecimal": 0 },
+            { "url": "http://hl7.org/fhir/StructureDefinition/maxValue", "valueDecimal": 3.0 }
+          ]
+        },
+        {
+          "linkId": "weight",
+          "type": "quantity",
+          "text": "Weight",
+          "extension": [
+            { "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-unit", "valueCoding": { "system": "http://unitsofmeasure.org", "code": "kg", "display": "kg" } }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "g-preferences",
+      "type": "group",
+      "text": "Preferences",
+      "item": [
+        {
+          "linkId": "subscribe",
+          "type": "boolean",
+          "text": "Subscribe to product updates"
+        },
+        {
+          "linkId": "contactMethod",
+          "type": "choice",
+          "text": "Preferred contact method",
+          "required": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-item-control",
+              "valueCodeableConcept": { "coding": [{ "system": "http://hl7.org/fhir/questionnaire-item-control", "code": "radio-button" }] }
+            }
+          ],
+          "answerOption": [
+            { "valueCoding": { "system": "http://example.org/contact", "code": "email", "display": "Email" }, "extension": [{ "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue", "valueDecimal": 1 }] },
+            { "valueCoding": { "system": "http://example.org/contact", "code": "phone", "display": "Phone" }, "extension": [{ "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue", "valueDecimal": 2 }] },
+            { "valueCoding": { "system": "http://example.org/contact", "code": "mail", "display": "Postal mail" }, "extension": [{ "url": "http://hl7.org/fhir/StructureDefinition/ordinalValue", "valueDecimal": 3 }] }
+          ]
+        },
+        {
+          "linkId": "country",
+          "type": "choice",
+          "text": "Country",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-item-control",
+              "valueCodeableConcept": { "coding": [{ "system": "http://hl7.org/fhir/questionnaire-item-control", "code": "drop-down" }] }
+            }
+          ],
+          "answerOption": [
+            { "valueCoding": { "system": "urn:iso:std:iso:3166", "code": "US", "display": "United States" } },
+            { "valueCoding": { "system": "urn:iso:std:iso:3166", "code": "CA", "display": "Canada" } },
+            { "valueCoding": { "system": "urn:iso:std:iso:3166", "code": "MX", "display": "Mexico" } },
+            { "valueCoding": { "system": "urn:iso:std:iso:3166", "code": "GB", "display": "United Kingdom" } }
+          ]
+        },
+        {
+          "linkId": "hearAbout",
+          "type": "open-choice",
+          "text": "How did you hear about us? (choose one or type your own)",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-item-control",
+              "valueCodeableConcept": { "coding": [{ "system": "http://hl7.org/fhir/questionnaire-item-control", "code": "radio-button" }] }
+            }
+          ],
+          "answerOption": [
+            { "valueString": "Search engine" },
+            { "valueString": "Friend or colleague" },
+            { "valueString": "Social media" }
+          ]
+        },
+        {
+          "linkId": "interests",
+          "type": "choice",
+          "text": "Interests (select all that apply)",
+          "repeats": true,
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-item-control",
+              "valueCodeableConcept": { "coding": [{ "system": "http://hl7.org/fhir/questionnaire-item-control", "code": "check-box" }] }
+            }
+          ],
+          "answerOption": [
+            { "valueCoding": { "system": "http://example.org/interest", "code": "tech", "display": "Technology" } },
+            { "valueCoding": { "system": "http://example.org/interest", "code": "design", "display": "Design" } },
+            { "valueCoding": { "system": "http://example.org/interest", "code": "sports", "display": "Sports" } },
+            { "valueCoding": { "system": "http://example.org/interest", "code": "music", "display": "Music" } }
+          ]
+        },
+        {
+          "linkId": "language",
+          "type": "choice",
+          "text": "Primary language",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-item-control",
+              "valueCodeableConcept": { "coding": [{ "system": "http://hl7.org/fhir/questionnaire-item-control", "code": "autocomplete" }] }
+            }
+          ],
+          "answerOption": [
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "en", "display": "English" } },
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "es", "display": "Spanish" } },
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "fr", "display": "French" } },
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "de", "display": "German" } },
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "zh", "display": "Chinese" } },
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "ar", "display": "Arabic" } },
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "hi", "display": "Hindi" } },
+            { "valueCoding": { "system": "urn:ietf:bcp:47", "code": "pt", "display": "Portuguese" } }
+          ]
+        },
+        {
+          "linkId": "satisfaction",
+          "type": "integer",
+          "text": "Overall satisfaction (0-10)",
+          "extension": [
+            {
+              "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-item-control",
+              "valueCodeableConcept": { "coding": [{ "system": "http://hl7.org/fhir/questionnaire-item-control", "code": "slider" }] }
+            },
+            { "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-sliderStepValue", "valueInteger": 1 },
+            { "url": "http://hl7.org/fhir/StructureDefinition/minValue", "valueInteger": 0 },
+            { "url": "http://hl7.org/fhir/StructureDefinition/maxValue", "valueInteger": 10 }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "g-conditional",
+      "type": "group",
+      "text": "Conditional logic",
+      "item": [
+        {
+          "linkId": "hasCar",
+          "type": "boolean",
+          "text": "Do you own a car?"
+        },
+        {
+          "linkId": "carMake",
+          "type": "string",
+          "text": "Car make",
+          "required": true,
+          "enableWhen": [
+            { "question": "hasCar", "operator": "=", "answerBoolean": true }
+          ]
+        },
+        {
+          "linkId": "anyContact",
+          "type": "display",
+          "text": "Thanks - we'll reach out using your preferred method.",
+          "enableWhen": [
+            { "question": "contactMethod", "operator": "exists", "answerBoolean": true }
+          ]
+        },
+        {
+          "linkId": "nonEmailContact",
+          "type": "string",
+          "text": "Best number or address to reach you",
+          "enableWhen": [
+            { "question": "contactMethod", "operator": "!=", "answerCoding": { "system": "http://example.org/contact", "code": "email" } }
+          ]
+        },
+        {
+          "linkId": "adultInfo",
+          "type": "display",
+          "text": "As an adult, you're eligible for the full plan.",
+          "enableWhen": [
+            { "question": "age", "operator": ">=", "answerInteger": 18 }
+          ]
+        },
+        {
+          "linkId": "juniorNote",
+          "type": "display",
+          "text": "A parent or guardian must review this form with you.",
+          "enableWhen": [
+            { "question": "age", "operator": "<=", "answerInteger": 17 }
+          ]
+        },
+        {
+          "linkId": "highSat",
+          "type": "display",
+          "text": "So glad you're happy! Would you leave us a review?",
+          "enableWhen": [
+            { "question": "satisfaction", "operator": ">", "answerInteger": 8 }
+          ]
+        },
+        {
+          "linkId": "notes",
+          "type": "text",
+          "text": "Sorry to hear that - what could we do better?",
+          "maxLength": 500,
+          "enableWhen": [
+            { "question": "satisfaction", "operator": "<", "answerInteger": 5 }
+          ]
+        },
+        {
+          "linkId": "adultCarOwner",
+          "type": "string",
+          "text": "Insurance provider (adult car owners only)",
+          "enableBehavior": "all",
+          "enableWhen": [
+            { "question": "hasCar", "operator": "=", "answerBoolean": true },
+            { "question": "age", "operator": ">=", "answerInteger": 18 }
+          ]
+        },
+        {
+          "linkId": "engagedUser",
+          "type": "display",
+          "text": "You're an engaged user - thanks for being here!",
+          "enableBehavior": "any",
+          "enableWhen": [
+            { "question": "subscribe", "operator": "=", "answerBoolean": true },
+            { "question": "satisfaction", "operator": ">=", "answerInteger": 9 }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "g-edge-cases",
+      "type": "group",
+      "text": "Edge cases",
+      "item": [
+        {
+          "linkId": "internalRef",
+          "type": "string",
+          "text": "Internal reference (should not render)",
+          "extension": [
+            { "url": "http://hl7.org/fhir/StructureDefinition/questionnaire-hidden", "valueBoolean": true }
+          ]
+        },
+        {
+          "linkId": "appointmentTime",
+          "type": "time",
+          "text": "Preferred appointment time (unsupported type - expect graceful placeholder)"
+        }
+      ]
+    }
+  ]
+}
