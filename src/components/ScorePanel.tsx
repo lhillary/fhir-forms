@@ -2,12 +2,22 @@ import { useMemo, type ReactElement } from 'react'
 import type { NormalizedItem } from '../parser/types'
 import { useScore } from '../store/useFormStore'
 
-interface ScorePanelProps {
-  items: NormalizedItem[]
+export interface SeverityBand {
+  min: number
+  max: number
+  label: string
 }
 
-export function ScorePanel({ items }: ScorePanelProps): ReactElement {
+interface ScorePanelProps {
+  items: NormalizedItem[]
+  bands?: readonly SeverityBand[] | undefined
+}
+
+export function ScorePanel({ items, bands }: ScorePanelProps): ReactElement {
   const score = useScore()
+  const band = bands?.find(
+    ({ min, max }) => score.total >= min && score.total <= max,
+  )
 
   const groupText = useMemo(() => {
     const map = new Map<string, string>()
@@ -25,16 +35,19 @@ export function ScorePanel({ items }: ScorePanelProps): ReactElement {
   return (
     <section
       aria-labelledby="score-heading"
-      className="rounded border border-gray-300 bg-gray-50 p-4"
+      className="rounded-lg border border-line bg-panel p-4"
     >
-      <h2 id="score-heading" className="text-lg font-semibold text-gray-900">
+      <h2 id="score-heading" className="text-lg font-semibold text-ink">
         Score
       </h2>
-      <p aria-live="polite" className="text-gray-900">
-        Total score: {score.total}
-      </p>
+      <div aria-live="polite">
+        <p className="mt-1 text-ink">Total score: {score.total}</p>
+        {band !== undefined && (
+          <p className="text-ink">Severity: {band.label}</p>
+        )}
+      </div>
       {score.byGroup !== undefined && (
-        <ul className="mt-1 text-sm text-gray-700">
+        <ul className="mt-1 text-sm text-ink-muted">
           {Object.entries(score.byGroup).map(([linkId, groupScore]) => (
             <li key={linkId}>
               {groupText.get(linkId) ?? linkId}: {groupScore}
@@ -42,6 +55,13 @@ export function ScorePanel({ items }: ScorePanelProps): ReactElement {
           ))}
         </ul>
       )}
+      <p className="mt-3 border-t border-line pt-3 text-sm text-ink-muted">
+        This is a demonstration project. Scores shown here are{' '}
+        <strong className="font-semibold">
+          not for clinical, diagnostic, or treatment use
+        </strong>
+        .
+      </p>
     </section>
   )
 }

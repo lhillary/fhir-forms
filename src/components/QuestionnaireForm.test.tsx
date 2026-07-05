@@ -74,3 +74,79 @@ test('the score panel shows the live total', async () => {
   await user.click(within(q1).getByText('Nearly every day'))
   expect(screen.getByText('Total score: 3')).toBeInTheDocument()
 })
+
+test('the score panel shows the severity band from the bands lookup', async () => {
+  const user = userEvent.setup()
+  render(
+    <QuestionnaireForm
+      items={phq9Items}
+      questionnaire={phq9Questionnaire}
+      bands={[
+        { min: 0, max: 4, label: 'Minimal depression' },
+        { min: 5, max: 9, label: 'Mild depression' },
+      ]}
+    />,
+  )
+  await screen.findByRole('button', { name: 'Submit' })
+
+  expect(screen.getByText('Severity: Minimal depression')).toBeInTheDocument()
+  for (const question of ['Little interest or pleasure', 'Feeling down']) {
+    const group = screen.getByRole('radiogroup', {
+      name: new RegExp(question),
+    })
+    await user.click(within(group).getByText('Nearly every day'))
+  }
+  expect(screen.getByText('Total score: 6')).toBeInTheDocument()
+  expect(screen.getByText('Severity: Mild depression')).toBeInTheDocument()
+})
+
+test('the score panel shows a persistent not-for-clinical-use disclaimer', async () => {
+  render(
+    <QuestionnaireForm items={phq9Items} questionnaire={phq9Questionnaire} />,
+  )
+  await screen.findByRole('button', { name: 'Submit' })
+
+  expect(
+    screen.getByText(/not for clinical, diagnostic, or treatment use/),
+  ).toBeInTheDocument()
+})
+
+test('reset asks for confirmation before clearing answers', async () => {
+  const user = userEvent.setup()
+  render(
+    <QuestionnaireForm items={phq9Items} questionnaire={phq9Questionnaire} />,
+  )
+  await screen.findByRole('button', { name: 'Submit' })
+
+  const q1 = screen.getByRole('radiogroup', {
+    name: /Little interest or pleasure/,
+  })
+  await user.click(within(q1).getByText('Nearly every day'))
+  expect(screen.getByText('Total score: 3')).toBeInTheDocument()
+
+  await user.click(screen.getByRole('button', { name: 'Reset' }))
+  const dialog = await screen.findByRole('alertdialog', {
+    name: 'Clear all answers?',
+  })
+  await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
+  expect(screen.getByText('Total score: 3')).toBeInTheDocument()
+
+  await user.click(screen.getByRole('button', { name: 'Reset' }))
+  const reopened = await screen.findByRole('alertdialog', {
+    name: 'Clear all answers?',
+  })
+  await user.click(
+    within(reopened).getByRole('button', { name: 'Clear answers' }),
+  )
+  expect(screen.getByText('Total score: 0')).toBeInTheDocument()
+  expect(within(q1).queryByRole('radio', { checked: true })).toBeNull()
+})
+
+test('a questionnaire with no items renders the empty state, not a form', async () => {
+  render(<QuestionnaireForm items={[]} questionnaire={phq9Questionnaire} />)
+
+  expect(
+    await screen.findByText('This questionnaire has no questions to display.'),
+  ).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'Submit' })).toBeNull()
+})

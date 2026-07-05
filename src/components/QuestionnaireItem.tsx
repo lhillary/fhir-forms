@@ -61,9 +61,9 @@ export function QuestionnaireItem({
     return (
       <fieldset
         id={fieldId(item.linkId)}
-        className="space-y-4 rounded border border-gray-300 p-4"
+        className="space-y-4 rounded border border-line p-4"
       >
-        <legend className="px-1 text-lg font-semibold text-gray-900">
+        <legend className="px-1 text-lg font-semibold text-ink">
           {item.text ?? item.linkId}
         </legend>
         {item.children.map((child) => (

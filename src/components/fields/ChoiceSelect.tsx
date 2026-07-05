@@ -21,7 +21,7 @@ import {
 } from '../styles'
 import { errorText, type ChoiceProps } from './fieldHelpers'
 
-const triggerClass = `flex w-full items-center justify-between gap-2 rounded border border-gray-500 bg-white px-3 py-1.5 text-left text-gray-900 data-invalid:border-red-700 ${focusRing}`
+const triggerClass = `flex w-full items-center justify-between gap-2 rounded-md border border-edge bg-white px-3 py-1.5 text-left text-ink data-invalid:border-danger ${focusRing}`
 
 export function ChoiceSelect({
   item,
@@ -47,7 +47,7 @@ export function ChoiceSelect({
         </Text>
       )}
       <Button className={triggerClass}>
-        <SelectValue className="data-placeholder:text-gray-600" />
+        <SelectValue className="data-placeholder:text-ink-muted" />
         <span aria-hidden="true">▼</span>
       </Button>
       <FieldError className={errorClass}>{errorText(errors)}</FieldError>

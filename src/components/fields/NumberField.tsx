@@ -76,7 +76,7 @@ export function NumberField({ item }: FieldProps): ReactElement {
       <Group className="flex items-center gap-2">
         <Input className={inputClass} />
         {item.unit?.display !== undefined && (
-          <span className="text-gray-700">{item.unit.display}</span>
+          <span className="text-ink-muted">{item.unit.display}</span>
         )}
       </Group>
       <FieldError className={errorClass}>{errorText(errors)}</FieldError>

@@ -1,1 +1,45 @@
 @import 'tailwindcss';
+
+/* Design tokens — the single source of truth for color, type, and radius.
+   Every component styles itself through these semantic names (via the
+   generated utilities, e.g. bg-primary, text-ink, outline-focus); raw
+   palette classes like blue-700 are banned outside this file.
+
+   Contrast (WCAG 2.2 AA): ink 16.9:1 and ink-muted 7.6:1 on surface/panel;
+   white on primary 6.3:1, on primary-strong 8.6:1, on danger 6.6:1;
+   edge borders 4.6:1 and the focus outline 6.3:1 against surface (≥3:1
+   non-text requirement). */
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+
+  --color-primary: #1d4ed8; /* actions, selected states */
+  --color-primary-strong: #1e40af; /* hover */
+  --color-primary-stronger: #1e3a8a; /* pressed */
+  --color-primary-tint: #dbeafe; /* selected/dragging fills */
+
+  --color-danger: #b91c1c; /* errors, destructive actions */
+  --color-danger-strong: #991b1b;
+
+  --color-ink: #111827; /* primary text */
+  --color-ink-muted: #4b5563; /* help text, secondary text */
+  --color-faint: #9ca3af; /* disabled text, dashed borders */
+
+  --color-edge: #6b7280; /* input borders (3:1+ non-text) */
+  --color-line: #d1d5db; /* decorative hairlines, group borders */
+
+  --color-page: #f3f4f6; /* app background */
+  --color-surface: #ffffff; /* cards, inputs, popovers */
+  --color-panel: #f8fafc; /* score panel, quiet fills */
+  --color-tint: #f3f4f6; /* hover fills */
+  --color-tint-strong: #e5e7eb; /* pressed fills */
+
+  --color-focus: #1d4ed8; /* focus-visible outline everywhere */
+}
+
+@layer base {
+  body {
+    @apply bg-page font-sans text-ink antialiased;
+  }
+}

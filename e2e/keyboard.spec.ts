@@ -8,7 +8,8 @@ test('phq9 can be completed keyboard-only and shows the score', async ({
   await page.goto('/?form=phq9')
   await expect(page.getByRole('button', { name: 'Submit' })).toBeVisible()
 
-  // Tab past the two nav links into the first radio group
+  // Tab past the skip link and the two nav links into the first radio group
+  await page.keyboard.press('Tab')
   await page.keyboard.press('Tab')
   await page.keyboard.press('Tab')
 

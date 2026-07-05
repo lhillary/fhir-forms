@@ -49,7 +49,7 @@ export function ChoiceComboBox({
       <div className="flex items-center gap-1">
         <Input className={inputClass} />
         <Button
-          className={`rounded px-2 py-1.5 text-gray-700 data-hovered:bg-gray-100 ${focusRing}`}
+          className={`rounded px-2 py-1.5 text-ink-muted data-hovered:bg-tint ${focusRing}`}
         >
           <span aria-hidden="true">▼</span>
         </Button>
