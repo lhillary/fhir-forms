@@ -2,15 +2,15 @@
 
 A client-side, schema-driven renderer for FHIR **R4** `Questionnaire` resources. Point it at
 a `Questionnaire` and it produces an accessible, validated form, computes scores live, and
-emits a spec-valid `QuestionnaireResponse` — with round-trip fidelity, so a previously
+emits a spec-valid `QuestionnaireResponse`. Round-trip fidelity means a previously
 captured response can be re-imported and edited.
 
 ## Features
 
-**FHIR correctness** — faithful handling of the item model, extensions, and the
+**FHIR correctness**: faithful handling of the item model, extensions, and the
    `QuestionnaireResponse` shape.
 
-**Real WCAG 2.2 AA accessibility** — with automated proof in CI (axe).
+**Real WCAG 2.2 AA accessibility**: automated proof in CI (axe).
 
 **Item types:** `group`, `display`, `boolean`, `string`, `text`, `integer`, `decimal`,
 `date`, `choice`, `open-choice`, `quantity`.
@@ -35,7 +35,7 @@ validation rule.
 
 ## Architecture
 
-Four layers with strictly one-way dependencies — each layer depends only on the one above it:
+Four layers with strictly one-way dependencies. Each layer depends only on the one above it:
 
 ```
 parser/      raw FHIR  ->  NormalizedItem tree; resolves ALL extensions    (no React)
@@ -47,9 +47,9 @@ store/       Zustand; answers normalized by linkId; selectors call engine
 components/  recursive renderer; react-aria-components; reads store only
 ```
 
-**Hard rule — dependencies point downward only.** After `parser/`, nothing touches raw
+**Hard rule: dependencies point downward only.** After `parser/`, nothing touches raw
 `fhir4.*` again; `NormalizedItem` is the boundary. `engine/` is framework-free and never
-imports React or the store. `components/` carry no FHIR logic — they render from a
+imports React or the store. `components/` carry no FHIR logic; they render from a
 `NormalizedItem` plus store state, and read enabled/error/score purely through store
 selectors.
 
@@ -61,7 +61,7 @@ accessibility.
 
 - **React 19** + **TypeScript** (strict, including `noUncheckedIndexedAccess` and
   `exactOptionalPropertyTypes`) + **Vite**
-- **react-aria-components** for accessible primitives — radio groups, selects, sliders,
+- **react-aria-components** for accessible primitives: radio groups, selects, sliders,
   comboboxes, date pickers. Not hand-rolled, not Radix.
 - **Zustand** for state, normalized by `linkId`. Not React Hook Form.
 - **fhirpath** for scoring (`weight()` for item weights, `calculatedExpression` evaluation)
@@ -81,7 +81,7 @@ src/
   App.tsx
 ```
 
-No barrel files — imports come straight from the source module.
+No barrel files; imports come straight from the source module.
 
 ## Getting started
 
