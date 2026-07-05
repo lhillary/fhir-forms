@@ -14,14 +14,15 @@ export type ControlType =
   | 'open-choice'
   | 'quantity'
 
-export type ItemControl = 'radio-button' | 'check-box' | 'drop-down' | 'slider' | 'autocomplete'
+export type ItemControl =
+  'radio-button' | 'check-box' | 'drop-down' | 'slider' | 'autocomplete'
 
 export type EnableWhenOperator = 'exists' | '=' | '!=' | '>' | '<' | '>=' | '<='
 
 export interface NormalizedAnswerOption {
-  code: string
+  code: string // system|code for coding, or the literal value
   display: string
-  weight?: number
+  weight?: number // resolved ordinalValue (R4) / itemWeight (R5)
   valueType: 'coding' | 'string' | 'integer' | 'date'
 }
 
@@ -38,12 +39,26 @@ export type AnswerValue =
 
 export type AnswerMap = Record<string, AnswerValue | AnswerValue[]>
 
-// enableWhen kept FHIR-shaped but pre-typed by operator + answer value so the
-// engine evaluates without re-parsing.
+// enableWhen pre-typed by operator + a discriminated answer so the engine
+// evaluates without re-parsing FHIR answer[x] shapes.
+export type EnableWhenAnswer =
+  | { kind: 'boolean'; value: boolean }
+  | { kind: 'integer'; value: number }
+  | { kind: 'decimal'; value: number }
+  | { kind: 'date'; value: string }
+  | { kind: 'string'; value: string }
+  | { kind: 'coding'; system?: string; code: string; display?: string }
+
 export interface NormalizedEnableWhen {
   question: string
   operator: EnableWhenOperator
-  value: AnswerValue
+  answer: EnableWhenAnswer
+}
+
+export interface NormalizedUnit {
+  code: string
+  system?: string
+  display?: string
 }
 
 export interface NormalizedConstraints {
@@ -64,18 +79,20 @@ export interface NormalizedSlider {
 export interface NormalizedItem {
   linkId: string
   type: ControlType
+  rawType?: string // original FHIR type when unsupported (e.g. 'time'); else omitted
   text?: string
   helpText?: string
   required: boolean
   repeats: boolean
   readOnly: boolean
   hidden: boolean
-  unsupported?: boolean
+  unsupported?: boolean // renderer keys off this, not `type` (unsupported items get type 'display')
   control?: ItemControl
   options?: NormalizedAnswerOption[]
+  unit?: NormalizedUnit // questionnaire-unit extension
   constraints: NormalizedConstraints
   slider?: NormalizedSlider
   enableWhen?: NormalizedEnableWhen[]
-  enableBehavior: 'any' | 'all'
+  enableBehavior: 'any' | 'all' // defaults to 'any' when absent
   children: NormalizedItem[]
 }
