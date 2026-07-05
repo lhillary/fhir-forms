@@ -61,7 +61,7 @@ export function QrControls(): ReactElement {
       >
         <Button className={secondaryButtonClass}>Import QR</Button>
       </FileTrigger>
-      <p role="status" className="text-sm text-gray-700">
+      <p role="status" className="text-sm text-ink-muted">
         {status}
       </p>
     </div>

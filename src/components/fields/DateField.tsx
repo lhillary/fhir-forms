@@ -26,11 +26,11 @@ import {
 } from '../styles'
 import { errorText, singleAnswer, type FieldProps } from './fieldHelpers'
 
-const segmentClass = `rounded px-0.5 text-gray-900 tabular-nums outline-hidden data-focused:bg-blue-700 data-focused:text-white data-placeholder:text-gray-600`
+const segmentClass = `rounded px-0.5 text-ink tabular-nums outline-hidden data-focused:bg-primary data-focused:text-white data-placeholder:text-ink-muted`
 
-const cellClass = `flex size-9 items-center justify-center rounded text-gray-900 data-hovered:bg-gray-100 data-selected:bg-blue-700 data-selected:text-white data-disabled:text-gray-400 data-outside-month:hidden ${focusRing}`
+const cellClass = `flex size-9 items-center justify-center rounded text-ink data-hovered:bg-tint data-selected:bg-primary data-selected:text-white data-disabled:text-faint data-outside-month:hidden ${focusRing}`
 
-const navButtonClass = `rounded px-2 py-1 text-gray-700 data-hovered:bg-gray-100 ${focusRing}`
+const navButtonClass = `rounded px-2 py-1 text-ink-muted data-hovered:bg-tint ${focusRing}`
 
 function toCalendarDate(value: string): CalendarDate | null {
   try {
@@ -79,7 +79,7 @@ export function DateField({ item }: FieldProps): ReactElement {
           {item.helpText}
         </Text>
       )}
-      <Group className="flex items-center justify-between rounded border border-gray-500 bg-white px-3 py-1.5 data-invalid:border-red-700">
+      <Group className="flex items-center justify-between rounded-md border border-edge bg-white px-3 py-1.5 data-invalid:border-danger">
         <DateInput className="flex">
           {(segment) => (
             <DateSegment segment={segment} className={segmentClass} />
@@ -97,7 +97,7 @@ export function DateField({ item }: FieldProps): ReactElement {
               <Button slot="previous" className={navButtonClass}>
                 ‹
               </Button>
-              <Heading className="font-medium text-gray-900" />
+              <Heading className="font-medium text-ink" />
               <Button slot="next" className={navButtonClass}>
                 ›
               </Button>

@@ -61,13 +61,13 @@ export function ErrorSummary({
   return (
     <section
       aria-labelledby="error-summary-heading"
-      className="rounded border-2 border-red-700 p-4"
+      className="rounded border-2 border-danger p-4"
     >
       <h2
         id="error-summary-heading"
         ref={headingRef}
         tabIndex={-1}
-        className="text-lg font-semibold text-red-700"
+        className="text-lg font-semibold text-danger"
       >
         There is a problem
       </h2>

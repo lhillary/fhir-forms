@@ -8,7 +8,7 @@ export function RadioIndicator(): ReactElement {
   return (
     <span
       aria-hidden="true"
-      className={`mt-0.5 size-5 shrink-0 rounded-full border-2 border-gray-500 bg-white group-data-selected:border-[6px] group-data-selected:border-blue-700 ${groupFocusRing}`}
+      className={`mt-0.5 size-5 shrink-0 rounded-full border-2 border-edge bg-white group-data-selected:border-[6px] group-data-selected:border-primary ${groupFocusRing}`}
     />
   )
 }
@@ -17,7 +17,7 @@ export function CheckIndicator(): ReactElement {
   return (
     <span
       aria-hidden="true"
-      className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border-2 border-gray-500 bg-white text-white group-data-selected:border-blue-700 group-data-selected:bg-blue-700 ${groupFocusRing}`}
+      className={`mt-0.5 flex size-5 shrink-0 items-center justify-center rounded border-2 border-edge bg-white text-white group-data-selected:border-primary group-data-selected:bg-primary ${groupFocusRing}`}
     >
       <svg
         viewBox="0 0 12 10"

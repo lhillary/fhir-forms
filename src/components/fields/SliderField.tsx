@@ -51,18 +51,18 @@ export function SliderField({ item }: FieldProps): ReactElement {
       >
         <div className="flex items-center justify-between">
           <Label className={labelClass}>{item.text ?? item.linkId}</Label>
-          <SliderOutput className="text-gray-700" />
+          <SliderOutput className="text-ink-muted" />
         </div>
         <SliderTrack className="relative h-6 w-full">
           {({ state }) => (
             <>
-              <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded bg-gray-300" />
+              <div className="absolute top-1/2 h-1.5 w-full -translate-y-1/2 rounded bg-line" />
               <div
-                className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded bg-blue-700"
+                className="absolute top-1/2 h-1.5 -translate-y-1/2 rounded bg-primary"
                 style={{ width: `${state.getThumbPercent(0) * 100}%` }}
               />
               <SliderThumb
-                className={`top-1/2 size-5 rounded-full border-2 border-blue-700 bg-white data-dragging:bg-blue-100 ${focusRing}`}
+                className={`top-1/2 size-5 rounded-full border-2 border-primary bg-white data-dragging:bg-primary-tint ${focusRing}`}
               />
             </>
           )}

@@ -46,3 +46,12 @@ test('phq9: answered state has no axe violations', async ({ page }) => {
   await expect(page.getByText('Total score: 1')).toBeVisible()
   await expectNoViolations(page)
 })
+
+test('reset confirmation dialog has no axe violations', async ({ page }) => {
+  await page.goto('/?form=phq9')
+  await page.getByRole('button', { name: 'Reset' }).click()
+  await expect(
+    page.getByRole('alertdialog', { name: 'Clear all answers?' }),
+  ).toBeVisible()
+  await expectNoViolations(page)
+})
