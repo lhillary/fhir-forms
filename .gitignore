@@ -32,3 +32,6 @@ dist-ssr
 # Some Claude files
 .claude/
 CLAUDE.md
+
+# Personal notes (never committed)
+/docs/
